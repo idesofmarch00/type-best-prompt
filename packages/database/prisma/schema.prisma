@@ -1,0 +1,156 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Authentication
+  accounts Account[]
+  sessions Session[]
+
+  // Application data
+  testSessions     TestSessionParticipant[]
+  submissions      Submission[]
+  userAnalytics    UserAnalytics?
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Question {
+  id               String  @id @default(cuid())
+  category         String
+  difficulty       String
+  questionText     String  @db.Text
+  context          String? @db.Text
+  expectedAnswer   String  @db.Text
+  evaluationCriteria Json
+  tags             String[]
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  testSessions     TestSession[]
+  submissions      Submission[]
+
+  @@map("questions")
+}
+
+model TestSession {
+  id              String   @id @default(cuid())
+  roomCode        String?  @unique
+  mode            String
+  status          String   // waiting, active, completed
+  questionId      String
+  startTime       DateTime?
+  endTime         DateTime?
+  maxParticipants Int      @default(6)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  question     Question                 @relation(fields: [questionId], references: [id])
+  participants TestSessionParticipant[]
+  submissions  Submission[]
+
+  @@map("test_sessions")
+}
+
+model TestSessionParticipant {
+  id        String   @id @default(cuid())
+  userId    String
+  sessionId String
+  joinedAt  DateTime @default(now())
+  status    String   // active, completed, disconnected
+  finalRank Int?
+
+  // Relations
+  user    User        @relation(fields: [userId], references: [id])
+  session TestSession @relation(fields: [sessionId], references: [id])
+
+  @@unique([userId, sessionId])
+  @@map("test_session_participants")
+}
+
+model Submission {
+  id            String   @id @default(cuid())
+  userId        String
+  sessionId     String
+  questionId    String
+  userPrompt    String   @db.Text
+  aiResponse    String   @db.Text
+  typingMetrics Json     // WPM, accuracy, keystroke timing, etc.
+  qualityScores Json     // AI response quality, prompt quality, etc.
+  finalScore    Decimal  @db.Decimal(6, 2)
+  timeToSubmit  Int      // milliseconds
+  
+  createdAt     DateTime @default(now())
+
+  // Relations
+  user     User        @relation(fields: [userId], references: [id])
+  session  TestSession @relation(fields: [sessionId], references: [id])
+  question Question    @relation(fields: [questionId], references: [id])
+
+  @@map("submissions")
+}
+
+model UserAnalytics {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  avgWpm           Decimal? @db.Decimal(5, 2)
+  avgAccuracy      Decimal? @db.Decimal(5, 2)
+  totalSessions    Int      @default(0)
+  skillProgression Json?    // Historical skill data
+  lastUpdated      DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("user_analytics")
+}
