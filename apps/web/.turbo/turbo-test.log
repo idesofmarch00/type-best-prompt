@@ -1,0 +1,16 @@
+
+> web@0.1.0 test
+> jest
+
+PASS src/store/useArenaStore.test.ts
+  useArenaStore
+    ✓ should initialize with default states (1 ms)
+    ✓ should update room ID when setRoomId is called
+    ✓ should update player progress and accuracy in state
+    ✓ should initialize mock match with mock data (1 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        0.249 s, estimated 1 s
+Ran all test suites.

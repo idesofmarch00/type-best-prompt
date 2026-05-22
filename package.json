@@ -1,29 +1,21 @@
 {
-  "name": "prompt_blitz",
-  "version": "0.1.0",
+  "name": "prompt_blitz-monorepo",
+  "version": "1.0.0",
   "private": true,
+  "packageManager": "npm@11.12.1",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "test:e2e": "turbo test:e2e",
+    "clean": "find . -name 'node_modules' -o -name '.next' -o -name 'dist' -type d -prune | xargs rm -rf"
   },
-  "dependencies": {
-    "lucide-react": "^1.16.0",
-    "next": "16.2.6",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "socket.io-client": "^4.8.3",
-    "zustand": "^5.0.13"
-  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.6",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "turbo": "^2.4.4"
   }
 }

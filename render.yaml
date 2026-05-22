@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: prompt-blitz-server
+    env: docker
+    dockerfilePath: apps/server/Dockerfile
+    dockerContext: .
+    plan: starter
+    envVars:
+      - key: PORT
+        value: 3001
+      - key: NODE_ENV
+        value: production
