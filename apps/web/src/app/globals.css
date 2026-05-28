@@ -1,48 +1,207 @@
 @import "tailwindcss";
 
-:root {
-  --background: #0b0f19;
-  --foreground: #e2e8f0;
-  --neon-green: #10b981;
-  --neon-purple: #d946ef;
-  --neon-blue: #0ea5e9;
+/* ============================================
+   CODERACER — Premium Esports Design System
+   ============================================ */
+
+/* --- Fonts --- */
+@layer base {
+  :root {
+    --font-sans: var(--font-inter), system-ui, sans-serif;
+    --font-mono: var(--font-mono), "Fira Code", "Courier New", monospace;
+  }
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-neon-green: var(--neon-green);
-  --color-neon-purple: var(--neon-purple);
-  --color-neon-blue: var(--neon-blue);
+/* --- Color Palette --- */
+:root {
+  /* Core Backgrounds */
+  --background: 222 47% 5%;           /* #0a0c14 deep void */
+  --background-alt: 222 40% 8%;       /* #0d1120 panels */
+  --background-elevated: 222 35% 11%; /* #121826 cards */
+
+  /* Borders */
+  --border: 220 20% 16%;              /* subtle grid lines */
+  --border-bright: 220 30% 25%;       /* hover borders */
+
+  /* Foreground */
+  --foreground: 210 40% 90%;          /* #d6e4f0 main text */
+  --foreground-muted: 215 20% 55%;    /* #7a92a8 secondary text */
+  --foreground-subtle: 215 15% 35%;   /* #4a5c6e disabled text */
+
+  /* Neon Accent System */
+  --neon-green: 160 84% 39%;          /* #10b981 emerald racing green */
+  --neon-green-glow: 160 84% 39%;
+  --neon-purple: 292 91% 66%;         /* #d946ef fuchsia speed */
+  --neon-purple-glow: 292 91% 66%;
+  --neon-blue: 199 89% 48%;           /* #0ea5e9 electric cyan */
+  --neon-blue-glow: 199 89% 48%;
+  --neon-amber: 38 92% 50%;           /* #f59e0b warning/gold */
+
+  /* Status Colors */
+  --success: 160 84% 39%;
+  --warning: 38 92% 50%;
+  --danger: 0 84% 60%;
+
+  /* Component Tokens */
+  --radius: 0.75rem;
+  --radius-sm: 0.375rem;
+  --radius-lg: 1rem;
+}
+
+/* --- Base Styles --- */
+* {
+  border-color: hsl(var(--border));
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  background-image: 
-    radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.08), transparent 30%),
-    radial-gradient(circle at 85% 30%, rgba(217, 70, 239, 0.08), transparent 30%);
+  font-family: var(--font-sans);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  background-image:
+    radial-gradient(ellipse at 10% 40%, hsl(160 84% 39% / 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 20%, hsl(292 91% 66% / 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, hsl(199 89% 48% / 0.04) 0%, transparent 50%);
+  min-height: 100vh;
 }
 
+/* --- Utility Classes --- */
+
+/* Glassmorphism Panel */
 .glass-panel {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(148, 163, 184, 0.15);
-  border-radius: 0.75rem;
+  background: hsl(var(--background-alt) / 0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.neon-border-green {
-  border: 1px solid var(--neon-green);
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4), inset 0 0 8px rgba(16, 185, 129, 0.2);
+.glass-panel:hover {
+  border-color: hsl(var(--border-bright));
 }
 
-.neon-text-green {
-  color: var(--neon-green);
-  text-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+.glass-panel-elevated {
+  background: hsl(var(--background-elevated) / 0.8);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid hsl(var(--border-bright));
+  border-radius: var(--radius);
 }
 
-.neon-text-purple {
-  color: var(--neon-purple);
-  text-shadow: 0 0 8px rgba(217, 70, 239, 0.6);
+/* Neon Text */
+.text-neon-green {
+  color: hsl(var(--neon-green));
+  text-shadow: 0 0 12px hsl(var(--neon-green) / 0.6);
+}
+
+.text-neon-purple {
+  color: hsl(var(--neon-purple));
+  text-shadow: 0 0 12px hsl(var(--neon-purple) / 0.6);
+}
+
+.text-neon-blue {
+  color: hsl(var(--neon-blue));
+  text-shadow: 0 0 12px hsl(var(--neon-blue) / 0.6);
+}
+
+/* Neon Borders */
+.border-neon-green {
+  border-color: hsl(var(--neon-green));
+  box-shadow: 0 0 8px hsl(var(--neon-green) / 0.3), inset 0 0 8px hsl(var(--neon-green) / 0.1);
+}
+
+.border-neon-blue {
+  border-color: hsl(var(--neon-blue));
+  box-shadow: 0 0 8px hsl(var(--neon-blue) / 0.3), inset 0 0 8px hsl(var(--neon-blue) / 0.1);
+}
+
+/* Neon Glows for interactive elements */
+.glow-green {
+  box-shadow: 0 0 20px hsl(var(--neon-green) / 0.4), 0 0 60px hsl(var(--neon-green) / 0.1);
+}
+
+.glow-blue {
+  box-shadow: 0 0 20px hsl(var(--neon-blue) / 0.4), 0 0 60px hsl(var(--neon-blue) / 0.1);
+}
+
+.glow-purple {
+  box-shadow: 0 0 20px hsl(var(--neon-purple) / 0.4), 0 0 60px hsl(var(--neon-purple) / 0.1);
+}
+
+/* Code/Mono text */
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Gradient text */
+.gradient-text-racing {
+  background: linear-gradient(135deg, hsl(var(--neon-green)), hsl(var(--neon-blue)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-fire {
+  background: linear-gradient(135deg, hsl(var(--neon-amber)), hsl(var(--neon-purple)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Scan line effect for terminal aesthetic */
+.scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    hsl(0 0% 0% / 0.03) 2px,
+    hsl(0 0% 0% / 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Animated pulse for live indicators */
+@keyframes pulse-neon {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse-neon {
+  animation: pulse-neon 1.5s ease-in-out infinite;
+}
+
+/* Shimmer for loading states */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--background-elevated)) 25%,
+    hsl(var(--border-bright)) 50%,
+    hsl(var(--background-elevated)) 75%
+  );
+  background-size: 200% auto;
+  animation: shimmer 2s linear infinite;
+}
+
+/* Race track progress bar */
+@keyframes race-glow {
+  0%, 100% { box-shadow: 0 0 10px currentColor; }
+  50% { box-shadow: 0 0 25px currentColor, 0 0 50px currentColor; }
+}
+
+.animate-race-glow {
+  animation: race-glow 2s ease-in-out infinite;
 }
